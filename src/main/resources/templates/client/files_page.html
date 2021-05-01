@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Client files</title>
+    <div th:replace="fragments/head :: header"></div>
+</head>
+<body class="justify-content-center">
+<div th:insert="~{fragments/navigation::navbar}"></div>
+<br>
+<div class="container-fluid col-6">
+    <div class="row">
+        <div class="col">
+            <span th:if="${status == null}">
+                <span th:if="${files.getTotalPages()>1}">
+                    <span th:each="i:${#numbers.sequence(1,files.getTotalPages())}">
+                        <a th:if="${currentPage != i}"
+                           th:href="@{/clients/{clientId}/files(clientId=${#authentication.getPrincipal().getId()}, page=${i})}">
+                            [[${i}]]
+                        </a>
+                        <a th:unless="${currentPage != i}">[[${i}]]</a>
+                    </span>
+                </span>
+            </span>
+            <span th:if="${status != null}">
+                <span th:if="${files.getTotalPages()>1}">
+                    <span th:each="i:${#numbers.sequence(1,files.getTotalPages())}">
+                        <a th:if="${currentPage != i}"
+                           th:href="@{/clients/{clientId}/files(clientId=${#authentication.getPrincipal().getId()}, page=${i}, status=${status})}">
+                            [[${i}]]
+                        </a>
+                        <a th:unless="${currentPage != i}">[[${i}]]</a>
+                    </span>
+                </span>
+            </span>
+        </div>
+
+        <p>Фильтр: </p>
+        <a href="#"
+           th:href="@{/clients/{clientId}/files(clientId=${#authentication.getPrincipal().getId()}, page='1', status='NOT_NOTARIZED')}">
+            &nbsp;Не подтверждённые&nbsp; </a>
+        <a href="#"
+           th:href="@{/clients/{clientId}/files(clientId=${#authentication.getPrincipal().getId()}, page='1', status='NOTARIZED')}">&nbsp;Подтверждённые&nbsp;</a>
+
+    </div>
+    <div class="row alert alert-primary justify-content-between" th:each="file : ${files.getContent()}">
+        <div class="col-4">
+            <a th:href="@{/files/{id}(id=${file.getId()})}" class="text-decoration-none" target="_blank">
+                <p th:text="${file.getName()}"> Title </p>
+            </a>
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <p th:text="${#dates.format(file.getCreatedAt(), 'dd MMMMM yyyy HH:mm')}" class="mt-auto"></p>
+            </div>
+            <div class="row">
+                <p th:text="${file.getClient().getFullName()}" class="mt-auto"></p>
+            </div>
+            <div class="row">
+                <p th:text="${file.getStatus().getDisplayedValue()}" class="mt-auto"></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

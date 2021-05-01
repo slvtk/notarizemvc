@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>File upload</title>
+    <div th:replace="fragments/head :: header"></div>
+</head>
+<body>
+<script>
+    $(document).ready(function () {
+
+        $("#file-upload-form").on("submit", function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                url: "/files/upload",
+                type: "POST",
+                data: new FormData(this),
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (res) {
+                    alert("Файл успешно загружен")
+                },
+                error: function (err) {
+                    alert("Произошла ошибка")
+                    console.error(err);
+                }
+            });
+        });
+    });
+</script>
+<div th:insert="~{fragments/navigation::navbar}"></div>
+<div class="container-fluid col-4 alert alert-primary">
+    <form action="#"
+          class="custom-file"
+          enctype="multipart/form-data"
+          id="file-upload-form">
+        <div class="row">
+        <label for="file" class="custom-file-label">Выбрать файл...</label>
+        <input type="file" name="file" class="custom-file-input" id="file">
+        </div>
+        <div class="row justify-content-center mt-3">
+        <input type="submit" value="Загрузить" class="btn btn-primary">
+        </div>
+    </form>
+</div>
+</body>
+</html>

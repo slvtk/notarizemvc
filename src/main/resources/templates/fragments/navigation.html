@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Navigation</title>
+    <div th:insert="~{fragments/navigation::navbar}"></div>
+</head>
+<body>
+<div th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white justify-content-between">
+        <a class="navbar-brand" th:href="@{/}"><span class="text-danger">NOTARIZE</span>APP</a>
+        <div sec:authorize="isAuthenticated()">
+            <div sec:authorize="hasRole('CLIENT')">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/chats}">Сообщения</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Файлы</a>
+
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item"
+                               th:href="@{/clients/{clientId}/files(clientId=${#authentication.getPrincipal().getId()})}">Мои
+                                файлы</a>
+                            <a class="dropdown-item" th:href="@{/files/new}">Загрузить файл<span
+                                    class="sr-only">(current)</span></a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Заявления</a>
+
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item"
+                               th:href="@{/clients/{clientId}/requests(clientId=${#authentication.getPrincipal().getId()})}">Мои
+                                заявления</a>
+                            <a class="dropdown-item" th:href="@{/requests/new}">Создать заявление<span
+                                    class="sr-only">(current)</span></a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false"
+                           th:text="${#authentication.getName()}" th:id="userName">Login</a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item"
+                               th:href="@{/clients/{clientId}(clientId=${#authentication.getPrincipal().getId()})}">Профиль</a>
+                            <a class="dropdown-item" th:href="@{/logout}">Выход<span
+                                    class="sr-only">(current)</span></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div sec:authorize="hasRole('NOTARY')">
+                <ul class="navbar-nav">
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/chats}">Сообщения</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Заявления</a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item"
+                               th:href="@{/requests}">Все заявления</a>
+                            <a class="dropdown-item"
+                               th:href="@{notaries/{notariusId}/requests(notariusId = ${#authentication.getPrincipal().getId()})}">В
+                                работе<span
+                                        class="sr-only">(current)</span></a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false"
+                           th:text="${#authentication.getName()}" th:id="userName">Логин</a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item"
+                               th:href="@{/notary/{notaryId}(notaryId=${#authentication.getPrincipal().getId()})}">Профиль</a>
+                            <a class="dropdown-item" th:href="@{/logout}">Выход<span
+                                    class="sr-only">(current)</span></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div sec:authorize="isAnonymous()">
+            <ul class="navbar-nav">
+                <li class="nav-item mr-2">
+                    <a class="btn btn-outline-info" th:href="@{/login}">Вход</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-success" th:href="@{/signup}">Регистрация</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Files</title>
+    <div th:replace="fragments/head :: header"></div>
+</head>
+<body class="justify-content-center">
+<div th:insert="~{fragments/navigation::navbar}"></div>
+<br>
+<div class="container-fluid col-6">
+    <div class="row alert alert-primary justify-content-between" th:each="file : ${files}">
+        <div class="col-4">
+            <a th:href="@{/files/{id}(id=${file.getId()})}" class="text-decoration-none">
+                <p th:text="${file.getName()}"> Title </p>
+            </a>
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <p th:text="${#dates.format(file.getCreatedAt(), 'dd MMMMM yyyy HH:mm')}" class="mt-auto"></p>
+            </div>
+            <div class="row">
+                <p th:text="${file.getClient().getFullName()}" class="mt-auto"></p>
+            </div>
+            <div class="row">
+                <p th:text="${file.getStatus().getDisplayedValue()}" class="mt-auto"></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

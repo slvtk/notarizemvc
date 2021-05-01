@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Index</title>
+    <div th:replace="fragments/head :: header"></div>
+    <style>
+        html, body {
+            overflow-y: hidden;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{fragments/navigation::navbar}"></div>
+
+<div class="container h-100 d-flex justify-content-center">
+    <div class="my-auto">
+        <img src="/img/access_denied.png" alt="access">
+    </div>
+</div>
+
+</body>
+</html>

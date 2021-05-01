@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New request</title>
+    <div th:replace="fragments/head :: header"></div>
+</head>
+<body class="justify-content-center">
+<div th:insert="~{fragments/navigation::navbar}"></div>
+<div class="container-fluid col-4" style="background-color: antiquewhite">
+    <form action="#" th:action="@{/requests}"
+          th:object="${requestDto}" th:method="post" class="form-group">
+        <label for="title">Название</label>
+        <input type="text" th:field="*{title}" id="title" placeholder="Название заявления" class="form-control">
+        <span style="color: red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span><br>
+        <label for="text">Текст</label>
+        <textarea type="text" th:field="*{description}" id="text" placeholder="Текст заявления" class="form-control"
+                  rows="5">
+        </textarea>
+        <span style="color: red" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span><br>
+        <input type="submit" value="Создать" class="btn btn-primary">
+    </form>
+</div>
+</body>
+</html>

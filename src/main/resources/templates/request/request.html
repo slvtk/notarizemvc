@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Request</title>
+    <div th:replace="fragments/head :: header"></div>
+
+</head>
+<body class="justify-content-center">
+<script>
+    $(document).ready(function () {
+
+        $("#file-upload-form").on("submit", function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                url: "/files/upload",
+                type: "POST",
+                data: new FormData(this),
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (res) {
+                    alert(res)
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        });
+    });
+</script>
+<div th:insert="~{fragments/navigation::navbar}"></div>
+<br>
+<div class="container-fluid col-4 alert alert-primary">
+    <div class="row">
+        <div class="col">
+            <h1 th:text="${request.getTitle()}" class="display-4"> Title </h1>
+            <p th:text="'Клиент: ' + ${request.getClient().getFullName()}" class="text-secondary">Author</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p th:text="${request.getDescription()}" class="lead"> Description </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p th:text="'Статус: ' + ${request.getStatus().getDisplayedValue()}" class="lead" style="color: darkred">
+                Status </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p id="filesCount" th:text="'Прикреплено файлов: ' + ${request.getFiles().size()}"
+               class="lead"> Files in request </p>
+        </div>
+    </div>
+    <div sec:authorize="hasRole('CLIENT')">
+        <div th:if="${request.getStatus().name().equals('DRAFT')}">
+            <hr>
+            <div class="row justify-content-between" th:each="file : ${files}">
+                <p th:text="${file.getName()}" class="lead col"> File and
+                    status</p>
+                <div th:unless="${request.getFiles().contains(file)}">
+                    <form method="POST" class="col"
+                          th:action="@{/requests/{requestId}/add/{fileId}(requestId=${request.getId()},fileId=${file.getId()})}">
+                        <button type="submit" name="submit" value="value"
+                                class="btn btn-success">
+                            Прикрепить
+                        </button>
+                    </form>
+                </div>
+                <div th:if="${request.getFiles().contains(file)}">
+                    <form method="POST" class="col"
+                          th:action="@{/requests/{requestId}/remove/{fileId}(requestId=${request.getId()},fileId=${file.getId()})}">
+                        <button type="submit" name="submit" value="value"
+                                class="btn btn-danger">
+                            Открепить
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="col">
+                <form method="POST" class="col"
+                      th:action="@{/requests/{requestId}/publish(requestId=${request.getId()})}">
+                    <button type="submit" name="submit" value="value"
+                            class="btn btn-info">
+                        Опубликовать
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div sec:authorize="hasRole('NOTARY')">
+        <div class="row justify-content-between" th:each="file : ${request.getFiles()}">
+            <a th:href="@{/files/{fileId}(fileId=${file.getId()})}" th:text="${file.getName()}" target="_blank" class="lead col"> File
+                and
+                status</a>
+        </div>
+        <div th:if="${request.getStatus().name().equals('FREE')}">
+            <form method="POST" class="col"
+                  th:action="@{/requests/{requestId}/take(requestId=${request.getId()})}">
+                <button type="submit" name="submit" value="value"
+                        class="btn btn-info">
+                    Взять в работу
+                </button>
+            </form>
+        </div>
+        <div th:if="${request.getStatus().name().equals('IN_PROGRESS')}">
+            <form method="POST" class="col"
+                  th:action="@{/requests/{requestId}/notarize(requestId=${request.getId()})}">
+                <button type="submit" name="submit" value="value"
+                        class="btn btn-info">
+                    Подтвердить
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

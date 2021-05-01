@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Client page</title>
+    <div th:replace="fragments/head :: header"></div>
+</head>
+<body>
+<div th:insert="~{fragments/navigation::navbar}"></div>
+<br>
+<div class="container-fluid col-10">
+    <div class="row alert alert-primary">
+        <div class="col-4 my-auto">
+            <img src="/img/avatar.png" style="width: 256px; height: 256px; border-radius: 50%;object-fit: cover">
+        </div>
+        <div class="col-8">
+            <h1 th:text="${client.getFullName()}" class="display-1"> Name </h1>
+            <p th:text="${client.getCity()}" class="display-4"> City </p>
+            <p th:text="${client.getCity()}" class="lead"> About </p>
+            <p th:text="${client.getAge()}" class="lead"> About </p>
+            <a th:href="@{/profile/edit}">Edit</a>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col text-center">
+            <p class="lead">
+                Files
+            </p>
+        </div>
+    </div>
+    <div>
+        <div class="row-12 justify-content-around alert alert-primary" th:each="file : ${client.getFiles()}">
+            <p th:text="${file.getName()} + ' ' + ${file.getStatus().getDisplayedValue()}" class="lead col-6"> Files and statuses</p>
+        </div>
+    </div>
+    <!--        <div class="col-3 text-center">-->
+    <!--            <p class="lead">-->
+    <!--                Published posts-->
+    <!--            </p>-->
+    <!--            <div th:each="publishedPost : ${student.getPosts()}">-->
+    <!--                <a th:href="@{/posts/{id}(id=${publishedPost.getId()})}">-->
+    <!--                    <p th:text="${publishedPost.getTitle()}" class="lead"> Published-->
+    <!--                        post </p>-->
+    <!--                </a>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+</div>
+</body>
+</html>

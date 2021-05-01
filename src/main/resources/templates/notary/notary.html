@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Client page</title>
+    <div th:replace="fragments/head :: header"></div>
+</head>
+<body>
+<div th:insert="~{fragments/navigation::navbar}"></div>
+<br>
+<div class="container-fluid col-10">
+    <div class="row alert alert-primary">
+        <div class="col-4 my-auto">
+            <img src="/img/avatar.png" style="width: 256px; height: 256px; border-radius: 50%;object-fit: cover">
+        </div>
+        <div class="col-8">
+            <h1 th:text="${notary.getFullName()}" class="display-1"> Name </h1>
+            <p th:text="${notary.getCity()}" class="display-4"> City </p>
+            <p th:text="${notary.getCity()}" class="lead"> About </p>
+            <p th:text="${notary.getAge()}" class="lead"> About </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

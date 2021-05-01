@@ -1,0 +1,74 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <div th:replace="fragments/head :: header"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/chat.css">
+</head>
+<body onload="connectToChat()">
+<div th:insert="~{fragments/navigation::navbar}"></div>
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <p class="display-4">WebSocket Chat</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-check">
+                <div sec:authorize="hasRole('CLIENT')">
+                    <div th:each="notary : ${notaries}">
+                        <a href="#" th:data-param="${notary}" th:onclick="selectUser(this.getAttribute('data-param'))"
+                           th:text="${notary}">Notary</a>
+                    </div>
+                </div>
+                <div sec:authorize="hasRole('NOTARY')">
+                    <div th:each="client : ${clients}">
+                        <a href="#" th:data-param="${client}" th:onclick="selectUser(this.getAttribute('data-param'))"
+                           th:text="${client}">Client</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row bg-light" style="height: 400px">
+        <div class="col overflow-auto">
+            <div class="chat-history">
+                <ul class="list-group mh-100">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script id="message-template" type="text/x-handlebars-template">
+        <div class="row  justify-content-end">
+            <div class="col-4 alert alert-success">{{time}} | Вы : {{messageOutput}}</div>
+        </div>
+    </script>
+
+    <script id="message-response-template" type="text/x-handlebars-template">
+        <div class="row">
+            <div class="col-4 alert alert-info">{{time}} | {{userName}} : {{response}}</div>
+        </div>
+    </script>
+
+    <div class="row">
+        <label for="message-to-send"></label>
+        <input type="text" id="message-to-send" class="col-10 form-control">
+        <button id="sendBtn" class="btn btn-outline-success col-2">Send</button>
+    </div>
+
+</div>
+
+<script src="/js/custom.js"></script>
+<script src="/js/chat.js"></script>
+</body>
+</html>
