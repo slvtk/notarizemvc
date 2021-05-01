@@ -22,3 +22,4 @@ uploads
 .mvn
 mvnw
 mvnw.cmd
+application.yml
