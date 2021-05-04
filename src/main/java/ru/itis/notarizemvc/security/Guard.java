@@ -9,7 +9,6 @@ import ru.itis.notarizemvc.models.User;
 import ru.itis.notarizemvc.repositories.FileRepository;
 import ru.itis.notarizemvc.repositories.UserRepository;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Component

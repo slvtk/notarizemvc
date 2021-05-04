@@ -18,6 +18,7 @@ import ru.itis.notarizemvc.models.User;
 import ru.itis.notarizemvc.services.ClientService;
 import ru.itis.notarizemvc.services.MessageService;
 import ru.itis.notarizemvc.services.NotaryService;
+import ru.itis.notarizemvc.services.UserService;
 import ru.itis.notarizemvc.utils.MessageMapper;
 
 import java.util.stream.Collectors;
@@ -27,16 +28,19 @@ import java.util.stream.Collectors;
 @RequestMapping("/chats")
 @RequiredArgsConstructor
 @CrossOrigin
-public class ChatController {
+public class MessageController {
 
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final UserService userService;
     private final NotaryService notaryService;
     private final ClientService clientService;
     private final MessageService messageService;
     private final MessageMapper messageMapper;
 
     @GetMapping
-    public String index() {
+    public String index(@AuthenticationPrincipal User user,
+                        Model model) {
+        model.addAttribute("partners",userService.getAllUserPartners(user.getId()));
         return "chat/chats";
     }
 
@@ -50,7 +54,7 @@ public class ChatController {
         } else {
             model.addAttribute("clients", clientService.getAll().stream().map(User::getUsername).collect(Collectors.toList()));
         }
-        model.addAttribute("chat", messageService.getChatMessages(user.getUsername(), receiverUsername)
+        model.addAttribute("chat", messageService.getPrivateChatMessages(user.getUsername(), receiverUsername)
                 .stream().map(messageMapper::toDto)
                 .collect(Collectors.toList()));
         return "/chat/chat";

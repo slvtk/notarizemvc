@@ -6,7 +6,7 @@
 </head>
 <body class="justify-content-center">
 <div th:insert="~{fragments/navigation::navbar}"></div>
-<div class="container-fluid col-4" style="background-color: antiquewhite">
+<div class="container-fluid col-4 alert alert-primary">
     <form action="#" th:action="@{/requests}"
           th:object="${requestDto}" th:method="post" class="form-group">
         <label for="title">Название</label>

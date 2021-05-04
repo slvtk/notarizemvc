@@ -7,7 +7,5 @@ import ru.itis.notarizemvc.models.Client;
 @Mapper(componentModel = "spring")
 public interface ClientMapper {
 
-    Client clientFromDto(ClientDto clientDto);
-
     ClientDto toDto(Client client);
 }

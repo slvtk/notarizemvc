@@ -1,8 +1,7 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Index</title>
+    <title>Chat</title>
     <div th:replace="fragments/head :: header"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
@@ -19,37 +18,31 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col">
-            <div class="form-check">
-                <div sec:authorize="hasRole('CLIENT')">
-                    <div th:each="notary : ${notaries}">
-                        <a href="#" th:data-param="${notary}" th:onclick="selectUser(this.getAttribute('data-param'))"
-                           th:text="${notary}">Notary</a>
-                    </div>
-                </div>
-                <div sec:authorize="hasRole('NOTARY')">
-                    <div th:each="client : ${clients}">
-                        <a href="#" th:data-param="${client}" th:onclick="selectUser(this.getAttribute('data-param'))"
-                           th:text="${client}">Client</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="row chat-header">
+        <img class="m-1" src="/img/avatar.png" style="width: 32px; height: 32px; border-radius: 50%;object-fit: cover">
+        <p id="receiver" class="font-weight-light mb-auto mt-auto"></p>
     </div>
 
-
-    <div class="row bg-light" style="height: 400px">
-        <div class="col overflow-auto">
-            <div class="chat-history">
-                <ul class="list-group mh-100">
-                </ul>
-            </div>
+    <div class="row" style="height: 400px">
+        <div class="col overflow-auto chat-history">
+            <ul class="list-group mh-100">
+                <div th:each="message:${chat}">
+                    <div class="row justify-content-end"
+                         th:if="${message.sender == #authentication.getName()}">
+                        <div class="col-4 alert alert-success"
+                             th:text="${#dates.format(message.getCreatedAt(), 'HH:mm')} +' | '+'Вы: ' + ${message.text}"></div>
+                    </div>
+                    <div class="row" th:if="${message.sender != #authentication.getName()}">
+                        <div class="col-4 alert alert-info"
+                             th:text="${#dates.format(message.getCreatedAt(), 'HH:mm')} +' | '+${message.sender} + ' ' + ${message.text}"></div>
+                    </div>
+                </div>
+            </ul>
         </div>
     </div>
 
     <script id="message-template" type="text/x-handlebars-template">
-        <div class="row  justify-content-end">
+        <div class="row justify-content-end">
             <div class="col-4 alert alert-success">{{time}} | Вы : {{messageOutput}}</div>
         </div>
     </script>

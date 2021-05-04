@@ -21,6 +21,7 @@ function cacheDOM() {
 }
 
 function render(message, userName) {
+    scrollToBottom()
     const templateResponse = Handlebars.compile($("#message-response-template").html());
     const contextResponse = {
         response: message,
@@ -30,12 +31,14 @@ function render(message, userName) {
 
     setTimeout(function () {
         $chatHistoryList.append(templateResponse(contextResponse))
+        scrollToBottom()
     }.bind(this), 1500)
 }
 
 //Отправка сообщения
 function sendMessage(message) {
     if (sendMsg(message)) {
+        scrollToBottom()
         let template = Handlebars.compile($("#message-template").html())
         let context = {
             messageOutput: message,
@@ -43,6 +46,7 @@ function sendMessage(message) {
             toUserName: selectedUser
         }
         $chatHistoryList.append(template(context))
+        scrollToBottom()
         $textarea.val('')
     }
 }
@@ -54,6 +58,10 @@ function getCurrentTime() {
 
 function addMessage() {
     sendMessage($textarea.val())
+}
+
+function scrollToBottom() {
+    $chatHistory.scrollTop($chatHistory[0].scrollHeight);
 }
 
 function addMessageEnter(event) {

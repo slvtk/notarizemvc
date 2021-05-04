@@ -30,20 +30,6 @@ public class Notary extends User {
                   Role role,
                   String fullName,
                   String city,
-                  String company,
-                  String bio) {
-        super(username, password, role);
-        this.fullName = fullName;
-        this.city = city;
-        this.company = company;
-        this.bio = bio;
-    }
-
-    public Notary(String username,
-                  String password,
-                  Role role,
-                  String fullName,
-                  String city,
                   Integer age) {
         super(username, password, role);
         this.fullName = fullName;

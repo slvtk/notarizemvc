@@ -7,8 +7,6 @@ import ru.itis.notarizemvc.models.File;
 @Mapper(componentModel = "spring")
 public interface FileMapper {
 
-    File fromDto(FileDto fileDto);
-
     FileDto toDto(File file);
 
 }

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chats</title>
+    <div th:replace="fragments/head :: header"></div>
+</head>
+<body>
+<div th:insert="~{fragments/navigation::navbar}"></div>
+<div th:each="partner:${partners}">
+    <a class="display-4" th:href="@{/chats/{username}(username = ${partner.getUsername()})}" th:text="${partner.getUsername()}"></a>
+</div>
+
+</body>
+</html>

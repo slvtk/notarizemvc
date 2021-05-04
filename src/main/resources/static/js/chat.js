@@ -4,15 +4,23 @@ let userName = $('#userName').text()
 let selectedUser
 
 function connectToChat() {
-    let socket = new SockJS(url + '/chat');
+    let href = $(location).attr('href')
+    let socket = new SockJS(url + '/chat')
+    selectedUser = href.substring(href.lastIndexOf("/") + 1, href.length)
+
+    scrollToBottom()
+    $('#receiver').text(selectedUser)
     stompClient = Stomp.over(socket)
     console.log("connecting to chat...")
+    console.log('Selected: ' + userName)
+    //берем из url имя получателя
     stompClient.connect({}, function (frame) {
         console.log("connected to: " + frame)
         stompClient.subscribe("/topic/messages/" + userName, function (response) {
-            alert("New message from:  " + userName)
             let data = JSON.parse(response.body)
-            render(data.text, data.sender)
+            if (selectedUser === data.sender){
+                render(data.text, data.sender)
+            }
         });
     });
 }
@@ -25,19 +33,16 @@ function sendMsg(message) {
     }
     console.log("Message : " + message)
     console.log(message.trim() !== '')
-    if (message.trim() === ''){
+    if (message.trim() === '') {
         alert("Пожалуйста, введите сообщение")
         return false
     }
 
     stompClient.send("/app/chat/" + selectedUser, {}, JSON.stringify({
         sender: userName,
-        text: message
+        receiver: selectedUser,
+        text: message,
+        createdAt: new Date()
     }))
     return true
-}
-
-function selectUser(userName) {
-    console.log('Selected: ' + userName)
-    selectedUser = userName
 }
