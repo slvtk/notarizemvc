@@ -49,11 +49,6 @@ public class MessageController {
     public String chat(@AuthenticationPrincipal User user,
                        @PathVariable String receiverUsername,
                        Model model) {
-        if (user.getRole().equals(Role.ROLE_CLIENT)) {
-            model.addAttribute("notaries", notaryService.getAll().stream().map(User::getUsername).collect(Collectors.toList()));
-        } else {
-            model.addAttribute("clients", clientService.getAll().stream().map(User::getUsername).collect(Collectors.toList()));
-        }
         model.addAttribute("chat", messageService.getPrivateChatMessages(user.getUsername(), receiverUsername)
                 .stream().map(messageMapper::toDto)
                 .collect(Collectors.toList()));

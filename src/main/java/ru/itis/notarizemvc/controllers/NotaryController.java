@@ -41,6 +41,4 @@ public class NotaryController {
         model.addAttribute("status", status);
         return "notary/requests_page";
     }
-
-
 }
